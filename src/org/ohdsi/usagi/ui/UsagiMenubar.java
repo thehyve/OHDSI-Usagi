@@ -55,6 +55,7 @@ public class UsagiMenubar extends JMenuBar {
 		viewMenu.add(Global.conceptInfoAction);
 		viewMenu.add(Global.athenaAction);
 		viewMenu.add(Global.googleSearchAction);
+		viewMenu.add(Global.ukbAction);
 
 		JMenu helpMenu = new JMenu("Help");
 		helpMenu.setMnemonic(KeyEvent.VK_H);

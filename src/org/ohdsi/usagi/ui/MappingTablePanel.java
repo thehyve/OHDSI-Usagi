@@ -64,6 +64,8 @@ public class MappingTablePanel extends JPanel implements DataChangeListener {
 
 					Global.googleSearchAction.setEnabled(true);
 					Global.googleSearchAction.setSourceTerm(tableModel.getCodeMapping(primaryModelRow).sourceCode.sourceName);
+					Global.ukbAction.setEnabled(true);
+					Global.ukbAction.setCode(tableModel.getCodeMapping(primaryModelRow).sourceCode.sourceCode);
 
 					Global.approveAction.setEnabled(true);
 					Global.approveSelectedAction.setEnabled(true);

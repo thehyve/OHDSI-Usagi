@@ -84,6 +84,7 @@ public class UsagiMain implements ActionListener {
 		Global.reviewerAssignmentAction = new ReviewerAssignmentAction();
 		Global.conceptInfoAction = new ConceptInformationAction();
 		Global.athenaAction = new AthenaAction();
+		Global.ukbAction = new UkbAction();
 		Global.googleSearchAction = new GoogleSearchAction();
 		Global.showStatsAction = new ShowStatsAction();
 		Global.aboutAction = new AboutAction();
@@ -107,6 +108,7 @@ public class UsagiMain implements ActionListener {
 		Global.conceptInfoAction.setEnabled(false);
 		Global.athenaAction.setEnabled(false);
 		Global.googleSearchAction.setEnabled(false);
+		Global.ukbAction.setEnabled(false);
 
 		frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		frame.addWindowListener(new WindowAdapter() {

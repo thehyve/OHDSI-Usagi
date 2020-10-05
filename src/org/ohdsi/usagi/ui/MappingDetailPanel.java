@@ -210,6 +210,7 @@ public class MappingDetailPanel extends JPanel implements CodeSelectedListener, 
 				Global.athenaAction.setEnabled(true);
 				Global.athenaAction.setConcept(searchTableModel.getConcept(modelRow));
 				Global.googleSearchAction.setEnabled(false);
+				Global.ukbAction.setEnabled(false);
 			}
 		});
 		// searchTable.hideColumn("Synonym");
@@ -359,6 +360,7 @@ public class MappingDetailPanel extends JPanel implements CodeSelectedListener, 
 				Global.athenaAction.setEnabled(true);
 				Global.athenaAction.setConcept(mappingTarget.concept);
 				Global.googleSearchAction.setEnabled(false);
+				Global.ukbAction.setEnabled(false);
 			}
 		});
 		targetConceptTable.hideColumn("Valid start date");
