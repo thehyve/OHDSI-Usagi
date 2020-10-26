@@ -16,6 +16,7 @@
 package org.ohdsi.usagi.ui;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 import javax.swing.JOptionPane;
@@ -76,6 +77,12 @@ public class Mapping extends ArrayList<CodeMapping> {
 
 	public void saveToFile(String filename) {
 		WriteCodeMappingsToFile out = new WriteCodeMappingsToFile(filename);
+
+		// Consistent sorting of save file
+		Comparator<CodeMapping> comparing = Comparator.comparing(o -> o.sourceCode.sourceCode);
+		comparing.thenComparing(o -> o.sourceCode.sourceValueCode);
+		this.sort(comparing);
+
 		for (CodeMapping codeMapping : this)
 			out.write(codeMapping);
 		out.close();
