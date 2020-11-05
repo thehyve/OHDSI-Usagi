@@ -102,7 +102,7 @@ public class ExportSourceToConceptMapDialog extends JDialog {
 			if (!file.getName().toLowerCase().endsWith(".csv"))
 				file = new File(file.getAbsolutePath() + ".csv");
 
-			writeToCsvFile(file.getAbsolutePath());
+			writeNewFormatSTCM(file.getAbsolutePath());
 			setVisible(false);
 		}
 	}
@@ -132,6 +132,72 @@ public class ExportSourceToConceptMapDialog extends JDialog {
 					row.add("invalid_reason", "");
 					out.write(row);
 				}
+			}
+		out.close();
+	}
+
+	private void writeNewFormatSTCM(String filename) {
+		WriteCSVFileWithHeader out = new WriteCSVFileWithHeader(filename);
+		for (CodeMapping mapping : Global.mapping)
+			if (exportUnapproved || mapping.mappingStatus == MappingStatus.APPROVED) {
+				Row row = new Row();
+				row.add("source_vocabulary_id", sourceVocabularyIdField.getText());
+				row.add("source_code", mapping.sourceCode.sourceCode);
+				row.add("value_code", mapping.sourceCode.sourceValueCode);
+				row.add("source_code_description", mapping.sourceCode.sourceName);
+				row.add("source_value_description", mapping.sourceCode.sourceValueName);
+				row.add("range", ""); // TODO
+				row.add("numeric", "" ); // TODO
+				row.add("error", ""); // TODO
+
+				for (MappingTarget target : mapping.targetConcepts) {
+					// TODO: if multiple targets have the same type, this fails. The UI should prevent this.
+					if (target.getMappingType() == MappingTarget.Type.EVENT) {
+						row.add("event_concept_id", target.getConcept().conceptId);
+					}
+					if (target.getMappingType() == MappingTarget.Type.UNIT) {
+						row.add("unit_concept_id", target.getConcept().conceptId);
+					}
+					if (target.getMappingType() == MappingTarget.Type.VALUE) {
+						row.add("value_concept_id", target.getConcept().conceptId);
+					}
+					if (target.getMappingType() == MappingTarget.Type.OPERATOR) {
+						row.add("operator_concept_id", target.getConcept().conceptId);
+					}
+					if (target.getMappingType() == MappingTarget.Type.CONDITION_STATUS) {
+						row.add("condition_status_concept_id", target.getConcept().conceptId);
+					}
+					if (target.getMappingType() == MappingTarget.Type.VISIT) {
+						row.add("visit_concept_id", target.getConcept().conceptId);
+					}
+					if (target.getMappingType() == MappingTarget.Type.TYPE) {
+						row.add("type_concept_id", target.getConcept().conceptId);
+					}
+				}
+
+				if (!row.getFieldNames().contains("event_concept_id")) {
+					row.add("event_concept_id", "");
+				}
+				if (!row.getFieldNames().contains("value_concept_id")) {
+					row.add("value_concept_id", "");
+				}
+				if (!row.getFieldNames().contains("unit_concept_id")) {
+					row.add("unit_concept_id", "");
+				}
+				if (!row.getFieldNames().contains("operator_concept_id")) {
+					row.add("operator_concept_id", "");
+				}
+				if (!row.getFieldNames().contains("condition_status_concept_id")) {
+					row.add("condition_status_concept_id", "");
+				}
+				if (!row.getFieldNames().contains("visit_concept_id")) {
+					row.add("visit_concept_id", "");
+				}
+				if (!row.getFieldNames().contains("type_concept_id")) {
+					row.add("type_concept_id", "");
+				}
+
+				out.write(row);
 			}
 		out.close();
 	}

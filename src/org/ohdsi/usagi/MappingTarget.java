@@ -20,7 +20,7 @@ package org.ohdsi.usagi;
  */
 public class MappingTarget{
 	public enum Type {
-		EVENT, VALUE, UNIT // Maybe also OPERATOR, TYPE, etc.
+		EVENT, VALUE, UNIT, OPERATOR, VISIT, TYPE, CONDITION_STATUS
 	};
 
 	public Concept concept;
