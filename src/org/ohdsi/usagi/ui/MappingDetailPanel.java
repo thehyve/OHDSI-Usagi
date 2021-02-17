@@ -134,13 +134,11 @@ public class MappingDetailPanel extends JPanel implements CodeSelectedListener, 
 
 		autoQueryValueButton = new JRadioButton("Value", false);
 		autoQueryValueButton.addActionListener(x -> doSearch());
-//		Hide other types
-//		panel.add(autoQueryValueButton, c);
+		panel.add(autoQueryValueButton, c);
 
 		autoQueryUnitButton = new JRadioButton("Unit", false);
 		autoQueryUnitButton.addActionListener(x -> doSearch());
-//		Hide other types
-//		panel.add(autoQueryUnitButton, c);
+		panel.add(autoQueryUnitButton, c);
 
 		c.gridx = 0;
 		c.gridy = 1;
@@ -243,8 +241,7 @@ public class MappingDetailPanel extends JPanel implements CodeSelectedListener, 
 			if (mappingType.equals(MappingTarget.Type.EVENT)) {
 				button = new JButton("Add concept");
 			} else {
-//				Hide other (value, unit) mapping types
-//				button = new JButton(String.format("Add %s concept", mappingType));
+				button = new JButton(String.format("Add %s concept", mappingType));
 				continue;
 			}
 			button.setToolTipText(String.format("Add selected concept as %s", mappingType));
@@ -300,7 +297,7 @@ public class MappingDetailPanel extends JPanel implements CodeSelectedListener, 
 
 		ignoreButton = new JButton(Global.ignoreAction);
 		ignoreButton.setBackground(new Color(151, 220, 141));
-//		panel.add(ignoreButton);
+		panel.add(ignoreButton);
 
 		flagButton = new JButton(Global.flagAction);
 		flagButton.setBackground(new Color(151, 220, 141));
@@ -334,10 +331,6 @@ public class MappingDetailPanel extends JPanel implements CodeSelectedListener, 
 		pane.setPreferredSize(new Dimension(500, 40));
 		panel.add(pane);
 
-		sourceCodeTable.hideColumn("Value");
-		sourceCodeTable.hideColumn("Value term");
-		sourceCodeTable.hideColumn("Unit term");
-
 		return panel;
 	}
 
@@ -368,7 +361,6 @@ public class MappingDetailPanel extends JPanel implements CodeSelectedListener, 
 				Global.googleSearchAction.setEnabled(false);
 			}
 		});
-		targetConceptTable.hideColumn("Mapping Type"); // Hide mapping types
 		targetConceptTable.hideColumn("Valid start date");
 		targetConceptTable.hideColumn("Valid end date");
 		targetConceptTable.hideColumn("Invalid reason");
@@ -391,8 +383,7 @@ public class MappingDetailPanel extends JPanel implements CodeSelectedListener, 
 		});
 		typesChooser.setMaximumSize(typesChooser.getPreferredSize());
 		typesChooser.setEnabled(false);
-//		Hide type chooser for this version, only allow event type
-//		buttonPanel.add(typesChooser);
+		buttonPanel.add(typesChooser);
 
 		removeButton = new JButton("Remove concept");
 		removeButton.setToolTipText("Add selected concept");

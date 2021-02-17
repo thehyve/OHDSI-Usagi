@@ -101,9 +101,6 @@ public class MappingTablePanel extends JPanel implements DataChangeListener {
 		table.hideColumn("Valid start date");
 		table.hideColumn("Valid end date");
 		table.hideColumn("Invalid reason");
-		table.hideColumn("Value");
-		table.hideColumn("Value term");
-		table.hideColumn("Unit term");
 
 		JScrollPane scrollPane = new JScrollPane(table);
 		add(scrollPane);
@@ -242,13 +239,11 @@ public class MappingTablePanel extends JPanel implements DataChangeListener {
 						return Integer.class;
 					case 4:
 						return Double.class;
-					case 5:
+					case 8:
 						return Integer.class;
-					case 7:
+					case 18:
 						return Integer.class;
-					case 15:
-						return Integer.class;
-					case 16:
+					case 19:
 						return Integer.class;
 					default:
 						return String.class;
