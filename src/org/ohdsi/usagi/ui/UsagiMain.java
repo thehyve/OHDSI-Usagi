@@ -177,12 +177,12 @@ public class UsagiMain implements ActionListener {
 
 	protected static void loadIcons(JFrame f) {
 		List<Image> icons = new ArrayList<Image>();
-		icons.add(loadIcon("Usagi16.png", f));
-		icons.add(loadIcon("Usagi32.png", f));
-		icons.add(loadIcon("Usagi48.png", f));
-		icons.add(loadIcon("Usagi64.png", f));
-		icons.add(loadIcon("Usagi128.png", f));
-		icons.add(loadIcon("Usagi256.png", f));
+		icons.add(loadIcon("/Usagi16.png", f));
+		icons.add(loadIcon("/Usagi32.png", f));
+		icons.add(loadIcon("/Usagi48.png", f));
+		icons.add(loadIcon("/Usagi64.png", f));
+		icons.add(loadIcon("/Usagi128.png", f));
+		icons.add(loadIcon("/Usagi256.png", f));
 		f.setIconImages(icons);
 	}
 
