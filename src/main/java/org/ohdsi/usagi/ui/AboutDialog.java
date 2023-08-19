@@ -53,7 +53,7 @@ public class AboutDialog extends JDialog {
 		g.gridx = 0;
 		g.gridy = 0;
 
-		Image icon = Toolkit.getDefaultToolkit().getImage(UsagiMain.class.getResource("Usagi64.png"));
+		Image icon = Toolkit.getDefaultToolkit().getImage(UsagiMain.class.getResource("/Usagi64.png"));
 		add(new JLabel(new ImageIcon(icon)), g);
 
 		g.gridx = 1;
