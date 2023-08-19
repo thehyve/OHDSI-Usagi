@@ -1,6 +1,7 @@
 /bin
 build/
 dist/
+target/
 
 ### Usagi index files ###
 derivedIndex/
