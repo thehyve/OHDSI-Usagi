@@ -44,12 +44,20 @@ public class UsagiMain implements ActionListener {
 	public static String version = "1.5.0-SNAPSHOT";
 
 	public static void main(String[] args) {
-		new UsagiMain(args);
+		new UsagiMain(true, args);
 	}
 
-	public UsagiMain(String[] args) {
-		JFrame frame = new JFrame("Usagi v" + UsagiMain.version);
+	private final JFrame frame;
+	private AuthorDialog authorDialog;
 
+	public UsagiMain(boolean doInitialize, String[] args) {
+		frame = new JFrame("Usagi v" + UsagiMain.version);
+		if (doInitialize) {
+			initializeUsagi(args);
+		}
+	}
+
+	public void initializeUsagi(String[] args) {
 		// Initialize global variables:
 		Global.mapping = new Mapping();
 		if (args.length == 1) {
@@ -137,8 +145,9 @@ public class UsagiMain implements ActionListener {
 		frame.pack();
 		frame.setVisible(true);
 
-		if (!Global.usagiSearchEngine.mainIndexExists())
+		if (!Global.usagiSearchEngine.mainIndexExists()) {
 			Global.rebuildIndexAction.actionPerformed(null);
+		}
 
 		if (args.length > 1 && args[0].equals("--file")) {
 			OpenAction.open(new File(args[1]));
@@ -209,4 +218,7 @@ public class UsagiMain implements ActionListener {
 			return new Vector<>();
 	}
 
+	public JFrame getFrame() {
+		return this.frame;
+	}
 }
