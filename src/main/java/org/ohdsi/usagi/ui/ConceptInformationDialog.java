@@ -288,6 +288,9 @@ public class ConceptInformationDialog extends JFrame {
 	}
 
 	private void showConcept(Concept concept) {
+		if (concept == null) {
+			return;
+		}
 		String name = concept.conceptName;
 		if (name.length() > 80)
 			name = name.substring(0, 80) + "...";
