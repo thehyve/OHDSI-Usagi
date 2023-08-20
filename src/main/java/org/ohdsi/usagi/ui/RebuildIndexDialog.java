@@ -37,6 +37,7 @@ import org.ohdsi.usagi.indexBuilding.IndexBuildCoordinator;
 
 public class RebuildIndexDialog extends JDialog {
 
+	public static final String REBUILD_INDEX_DIALOG = "RebuildIndexDialog";
 	private static final long	serialVersionUID	= 2560460762547493210L;
 	private JTextField			vocabFolderField;
 	private JTextField			loincFileField;
@@ -45,6 +46,7 @@ public class RebuildIndexDialog extends JDialog {
 
 	public RebuildIndexDialog() {
 		setTitle("Rebuild index");
+		setName(REBUILD_INDEX_DIALOG);
 		setLayout(new BoxLayout(this.getContentPane(), BoxLayout.Y_AXIS));
 		add(createVocabFolderPanel());
 		add(createLoincFilePanel());

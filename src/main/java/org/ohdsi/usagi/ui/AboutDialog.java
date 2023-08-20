@@ -41,8 +41,13 @@ public class AboutDialog extends JDialog {
 
 	private static final long	serialVersionUID	= 2028328868610404663L;
 
+	public static final String ABOUT_DIALOG = "AboutDialog";
+	public static final String ABOUT_TEXT = "AboutText";
+	public static final String ABOUT_TEXT_START = "Usagi is maintained by The Hyve (www.thehyve.nl)";
+	public static String VERSION = "About Usagi v" + UsagiMain.version;
 	public AboutDialog() {
-		setTitle("About Usagi v" + UsagiMain.version);
+		setTitle(VERSION);
+		setName(ABOUT_DIALOG);
 		setLayout(new GridBagLayout());
 
 		GridBagConstraints g = new GridBagConstraints();
@@ -61,7 +66,7 @@ public class AboutDialog extends JDialog {
 
 		JEditorPane text = new JEditorPane(
 				"text/html",
-				"Usagi is maintained by The Hyve (www.thehyve.nl), and originally developed by Martijn Schuemie" +
+				ABOUT_TEXT_START + ", and originally developed by Martijn Schuemie" +
 						"<br/>in <a href=\"http://ohdsi.org\">Observational Health Data Sciences and Informatics</a> (OHDSI)." +
 						"<br/><br/>For help, please review the <a href =\"http://www.ohdsi.org/web/wiki/doku.php?id=documentation:software:usagi\">Usagi Wiki</a>." +
 						"<br/><br/>Equivalence definitions based on <a href=\"https://www.hl7.org/fhir/valueset-concept-map-equivalence.html\">HL7 concept-map-quivalence</a>:" +
@@ -77,6 +82,7 @@ public class AboutDialog extends JDialog {
 
 		text.setEditable(false);
 		text.setOpaque(false);
+		text.setName(ABOUT_TEXT);
 
 		text.addHyperlinkListener(event -> {
 			if (HyperlinkEvent.EventType.ACTIVATED.equals(event.getEventType())) {

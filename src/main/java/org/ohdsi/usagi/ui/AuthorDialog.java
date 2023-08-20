@@ -22,12 +22,14 @@ import java.awt.*;
 
 public class AuthorDialog extends JDialog {
 
+	public static final String AUTHOR_DIALOG = "AuthorDialog";
 	private static final long serialVersionUID = 8239922540117895957L;
 	private String authorFileName;
 
 	public AuthorDialog() {
 		setTitle("Usagi v" + UsagiMain.version);
 		setLayout(new GridBagLayout());
+		setName(AUTHOR_DIALOG);
 		GridBagConstraints g = new GridBagConstraints();
 		g.fill = GridBagConstraints.BOTH;
 		g.ipadx = 5;
