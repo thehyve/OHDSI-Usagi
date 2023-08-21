@@ -6,7 +6,6 @@ on:
   push:
     branches: [ master, develop ]
   pull_request: {}
-  workflow_dispatch:
 
 jobs:
   # Build and test the code
@@ -32,4 +31,3 @@ jobs:
       # Gradle check
       - name: Check
         run: mvn test
-
