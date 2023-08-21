@@ -49,6 +49,7 @@ public class UsagiMain implements ActionListener {
 
 	private final JFrame frame;
 	private AuthorDialog authorDialog;
+	private boolean skipRebuildIndexAction = false;
 
 	public UsagiMain(boolean doInitialize, String[] args) {
 		frame = new JFrame("Usagi v" + UsagiMain.version);
@@ -146,7 +147,9 @@ public class UsagiMain implements ActionListener {
 		frame.setVisible(true);
 
 		if (!Global.usagiSearchEngine.mainIndexExists()) {
-			Global.rebuildIndexAction.actionPerformed(null);
+			if (!skipRebuildIndexAction) {
+				Global.rebuildIndexAction.actionPerformed(null);
+			}
 		}
 
 		if (args.length > 1 && args[0].equals("--file")) {
@@ -220,5 +223,15 @@ public class UsagiMain implements ActionListener {
 
 	public JFrame getFrame() {
 		return this.frame;
+	}
+
+	/*
+	 * For automated test purposes only!
+	 * The design of UsagiMain is a bit unfortunate for automated UI tests in the sense that some UI
+	 * actions are triggered before the main application window is properly initialized. This method allows
+	 * test code to let UsagiMain skip the rebuildIndexAction.
+	 */
+	public void setSkipRebuildIndexAction(boolean doSkip) {
+		this.skipRebuildIndexAction = doSkip;
 	}
 }
