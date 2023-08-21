@@ -1,12 +1,5 @@
-# Continuous integration, including test and integration test
-name: CI
-
-# Run in master and dev branches and in all pull requests to those branches
-on:
-  push:
-    branches: [ master, develop ]
-  pull_request: {}
-
+name: ManualWorkflow
+on: [workflow_dispatch]
 jobs:
   # Build and test the code
   build:
