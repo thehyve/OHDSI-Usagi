@@ -9,6 +9,9 @@ import org.assertj.swing.fixture.JTextComponentFixture;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.internal.TextListener;
+import org.junit.runner.JUnitCore;
+import org.junit.runner.Result;
 import org.junit.runner.RunWith;
 
 import javax.swing.*;
@@ -32,6 +35,16 @@ import org.ohdsi.usagi.ui.UsagiMain;
 public class TestLauncher {
     private final static int WIDTH = 1920;
     private final static int HEIGHT = 1080;
+
+    public static void main(String[] args) {
+        JUnitCore junit = new JUnitCore();
+        junit.addListener(new TextListener(System.out));
+        Result result = junit.run(TestLauncher.class);
+        if (!result.wasSuccessful()) {
+            System.out.println("test failed!");
+        }
+        System.exit(result.wasSuccessful() ? 0 : 1);
+    }
 
     @BeforeClass
     public static void setupOnce() {
