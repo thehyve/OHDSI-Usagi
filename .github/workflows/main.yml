@@ -31,3 +31,8 @@ jobs:
       # Gradle check
       - name: Check
         run: mvn test
+
+name: Manual trigger
+
+on:
+  workflow_dispatch:
