@@ -32,7 +32,7 @@ jobs:
       - name: Check
         run: mvn test
 
-name: Manual Workflow
+name: ManualWorkflow
 on: [workflow_dispatch]
 jobs:
   # Build and test the code
