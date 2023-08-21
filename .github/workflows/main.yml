@@ -6,6 +6,11 @@ on:
   push:
     branches: [ master, develop ]
   pull_request: {}
+  workflow_dispatch:
+    inputs:
+      tags:
+        description: 'Manual tags'
+        required: false
 
 jobs:
   # Build and test the code
