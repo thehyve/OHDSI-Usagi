@@ -164,6 +164,7 @@
         </pluginManagement>
         <plugins>
             <plugin>
+                <!-- The maven-shade-plugin takes care of building the fat jar for distribution -->
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
                 <version>3.5.0</version>
@@ -179,52 +180,11 @@
                             <outputFile>dist/Usagi.jar</outputFile>
                         </configuration>
                     </execution>
-                    <!--                    <execution>-->
-                    <!--                        <id>shade-test</id>-->
-                    <!--                        <phase>package</phase>-->
-                    <!--                        <goals>-->
-                    <!--                            <goal>shade</goal>-->
-                    <!--                        </goals>-->
-                    <!--                        <configuration>-->
-                    <!--                            <createDependencyReducedPom>false</createDependencyReducedPom>-->
-                    <!--                            <shadeTestJar>true</shadeTestJar>-->
-                    <!--                            <outputFile>target/Usagi-test.jar</outputFile>-->
-                    <!--                            <transformers>-->
-                    <!--                                <transformer implementation="org.apache.maven.plugins.shade.resource.IncludeResourceTransformer">-->
-                    <!--                                    <resource>org/ohdsi/usagi/TestLauncher.class</resource>-->
-                    <!--                                    <file>${project.build.testOutputDirectory}/org/ohdsi/usagi/TestLauncher.class</file>-->
-                    <!--                                </transformer>-->
-                    <!--                                <transformer implementation=-->
-                    <!--                                                     "org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">-->
-                    <!--                                    <mainClass>org.ohdsi.usagi.TestLauncher</mainClass>-->
-                    <!--                                </transformer>-->
-                    <!--                            </transformers>-->
-                    <!--                            &lt;!&ndash; filters>-->
-                    <!--                            <filter>-->
-                    <!--                                <excludeDefaults>false</excludeDefaults>-->
-                    <!--                                <artifact>junit:junit</artifact>-->
-                    <!--                                <includes>-->
-                    <!--                                    <include>junit/framework/**</include>-->
-                    <!--                                    <include>org/junit/**</include>-->
-                    <!--                                </includes>-->
-                    <!--                            </filter>-->
-                    <!--                            </filters &ndash;&gt;-->
-                    <!--                            <artifactSet>-->
-                    <!--                                <includes>-->
-                    <!--                                    <include>com.github.caciocavallosilano:*</include>-->
-                    <!--                                    <include>junit:junit</include>-->
-                    <!--                                    <include>org.apache.lucene:*</include>-->
-                    <!--                                    <include>org.apache.poi:*</include>-->
-                    <!--                                </includes>-->
-                    <!--                                &lt;!&ndash; excludes>-->
-                    <!--                                    <exclude>*:maven-core</exclude>-->
-                    <!--                                </excludes &ndash;&gt;-->
-                    <!--                            </artifactSet>-->
-                    <!--                        </configuration>-->
-                    <!--                    </execution>-->
                 </executions>
             </plugin>
             <plugin>
+                <!-- the maven-assembly-plugin takes care of building a fat jar that executes a smoke test for
+                     RabbitInAHat (also uses src/main/assembly/assembly.xml -->
                 <artifactId>maven-assembly-plugin</artifactId>
                 <configuration>
                     <descriptor>src/main/assembly/assembly.xml</descriptor>
