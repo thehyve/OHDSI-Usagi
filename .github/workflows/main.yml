@@ -6,6 +6,7 @@ on:
   push:
     branches: [ master, develop ]
   pull_request: {}
+  workflow_dispatch:
 
 jobs:
   # Build and test the code
@@ -32,7 +33,3 @@ jobs:
       - name: Check
         run: mvn test
 
-name: Manual trigger
-
-on:
-  workflow_dispatch:
