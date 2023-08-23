@@ -56,7 +56,13 @@ Usagi is licensed under Apache License 2.0.
 
 Development
 ===========
-Usagi is being developed in Eclipse. Contributions are welcome.
+Usagi is built through maven.
+There are unit & integration tests (the integration tests depends on Docker/TestContainers).
+Before submitting a pull request, please make sure these tests run (by using `mvn clean verify`).
+
+Some unit tests for the GUI depend on [cacio-tta](https://github.com/CaciocavalloSilano/caciocavallo) for
+running the GUI tests headless, see `TestLauncher.java` for some more information on that, including on how
+to switch it off to be able to see the tests run when developing/debugging these tests.F
 ### Development status
 Ready for use.
 

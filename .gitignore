@@ -1,6 +1,9 @@
 /bin
 build/
 dist/
+target/
+
+.java-version
 
 ### Usagi index files ###
 derivedIndex/
