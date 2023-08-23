@@ -44,7 +44,7 @@ public class AboutDialog extends JDialog {
 	public static final String ABOUT_DIALOG = "AboutDialog";
 	public static final String ABOUT_TEXT = "AboutText";
 	public static final String ABOUT_TEXT_START = "Usagi is maintained by The Hyve (www.thehyve.nl)";
-	public static String VERSION = "About Usagi v" + UsagiMain.version;
+	public static String VERSION = "About Usagi v" + UsagiMain.getVersion();
 	public AboutDialog() {
 		setTitle(VERSION);
 		setName(ABOUT_DIALOG);

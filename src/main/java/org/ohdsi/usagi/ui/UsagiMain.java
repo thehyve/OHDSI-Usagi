@@ -25,15 +25,19 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 import java.util.Vector;
 
 import javax.swing.*;
 
+import org.apache.poi.util.StringUtil;
 import org.ohdsi.usagi.BerkeleyDbEngine;
 import org.ohdsi.usagi.UsagiSearchEngine;
 import org.ohdsi.usagi.ui.actions.*;
+import org.ohdsi.utilities.StringUtilities;
 import org.ohdsi.utilities.files.ReadTextFile;
 
 /**
@@ -41,7 +45,8 @@ import org.ohdsi.utilities.files.ReadTextFile;
  */
 public class UsagiMain implements ActionListener {
 
-	public static String version = "1.5.0-SNAPSHOT";
+	private static final String version = getVersionFromProperties();
+	public static final String NO_VERSION = "(no version)";
 
 	public static void main(String[] args) {
 		new UsagiMain(true, args);
@@ -233,5 +238,24 @@ public class UsagiMain implements ActionListener {
 	 */
 	public void setSkipRebuildIndexAction(boolean doSkip) {
 		this.skipRebuildIndexAction = doSkip;
+	}
+
+	public static String getVersion() {
+		return version;
+	}
+
+	private static String getVersionFromProperties() {
+		String version = NO_VERSION;
+		final Properties properties = new Properties();
+		try {
+			properties.load(UsagiMain.class.getClassLoader().getResourceAsStream("project.properties"));
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+		String versionProperty = properties.getProperty("org.ohdsi.usagi.version");
+		if (versionProperty != null && !versionProperty.isEmpty()) {
+			version = versionProperty;
+		}
+		return version;
 	}
 }

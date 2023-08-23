@@ -27,7 +27,7 @@ public class AuthorDialog extends JDialog {
 	private String authorFileName;
 
 	public AuthorDialog() {
-		setTitle("Usagi v" + UsagiMain.version);
+		setTitle("Usagi v" + UsagiMain.getVersion());
 		setLayout(new GridBagLayout());
 		setName(AUTHOR_DIALOG);
 		GridBagConstraints g = new GridBagConstraints();
