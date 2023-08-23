@@ -455,13 +455,11 @@ public class ImportDialog extends JDialog {
 				})).get();
 				forkJoinPool.shutdown();
 				dialog.setVisible(false);
-				synchronized (dialog) {
-					Global.applyPreviousMappingAction.setEnabled(true);
-					Global.saveAction.setEnabled(true);
-					Global.saveAsAction.setEnabled(true);
-					Global.exportAction.setEnabled(true);
-					Global.exportForReviewAction.setEnabled(true);
-				}
+				Global.applyPreviousMappingAction.setEnabled(true);
+				Global.saveAction.setEnabled(true);
+				Global.saveAsAction.setEnabled(true);
+				Global.exportAction.setEnabled(true);
+				Global.exportForReviewAction.setEnabled(true);
 			} catch (Exception e) {
 				JOptionPane.showMessageDialog(Global.frame, StringUtilities.wordWrap(e.getMessage(), 80), "Error", JOptionPane.ERROR_MESSAGE);
 			}
