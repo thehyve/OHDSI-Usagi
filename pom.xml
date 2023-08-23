@@ -207,19 +207,23 @@
                                         <exclude>META-INF/services/org.apache.lucene.codecs.PostingsFormat</exclude>
                                     </excludes>
                                 </filter>
+                                <filter>
+                                    <artifact>org.ohdsi.usagi:*</artifact>
+                                    <excludes>
+                                        <exclude>META-INF/*.MF</exclude>
+                                    </excludes>
+                                </filter>
                             </filters>
                             <transformers>
-                                <transformer
-                                        implementation="org.apache.maven.plugins.shade.resource.DontIncludeResourceTransformer">
-                                    <resource>MANIFEST.MF</resource>
-                                </transformer>
-
-                                <!-- Add a transformer to include your custom manifest file. -->
-                                <transformer
-                                        implementation="org.apache.maven.plugins.shade.resource.IncludeResourceTransformer">
-                                    <resource>META-INF/MANIFEST.MF</resource>
-                                    <file>src/main/resources/META-INF/MANIFEST.MF</file>
-                                </transformer>
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                <mainClass>
+                                    org.ohdsi.usagi.Launcher
+                                </mainClass>
+                            </transformer>
+                            <transformer
+                                    implementation="org.apache.maven.plugins.shade.resource.DontIncludeResourceTransformer">
+                                <resource>MANIFEST.MF</resource>
+                            </transformer>
                             </transformers>
                         </configuration>
                     </execution>
@@ -227,7 +231,9 @@
             </plugin>
             <plugin>
                 <!-- the maven-assembly-plugin takes care of building a fat jar that executes a smoke test for
-                     RabbitInAHat (also uses src/main/assembly/assembly.xml -->
+                     RabbitInAHat (also uses src/main/assembly/assembly.xml)
+                     The main objective is to establish that the distributed jar is complete with all
+                     dependencies -->
                 <artifactId>maven-assembly-plugin</artifactId>
                 <version>3.6.0</version>
                 <configuration>
