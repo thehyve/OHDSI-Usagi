@@ -30,7 +30,7 @@ public class ITLauncher {
     @ClassRule
     public static GenericContainer<?> jre8Container = new GenericContainer<>(JRE8_IMAGE)
             .withCopyToContainer(MountableFile.forHostPath(usagiTestJarPath), "/tmp/Usagi-test.jar")
-            .withCommand("/bin/sh", "-c", "sleep 1000") // long enough to run the test; container will be stopped anyway when the test has finished
+            .withCommand("/bin/sh", "-c", "tail -f /dev/null") // keeps the container running until it is explicitly stopped
             .withLogConsumer(new Slf4jLogConsumer(LOGGER));
 
     @Test
@@ -43,7 +43,7 @@ public class ITLauncher {
         // run the test, check that it ran well
         Container.ExecResult javaRunCommand = jre8Container.execInContainer("/bin/sh", "-c", "java -jar /tmp/Usagi-test.jar");
         assertEquals(0, javaRunCommand.getExitCode());
-        System.out.println(javaRunCommand.getStdout()); // so satisfying too see a test was OK :-)
+        System.out.println(javaRunCommand.getStdout()); // so satisfying to see a test was OK :-)
         jre8Container.stop();
     }
 }
