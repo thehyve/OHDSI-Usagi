@@ -17,9 +17,11 @@ import static org.junit.Assert.assertEquals;
 
 /*
  * The intent of this integration test is to create a clean docker container with jre8,
- * copy the Usagi-test.jar into it, and run it.
+ * copy the Usagi-test.jar into it, and run it. This verifies that the package created for distribution
+ * will run with Java 8.
  * Usagi-test.jar will then execute one junit test that verifies that the application
- * properly starts and stops. This serves as a smoke test for the distribution: it runs
+ * properly starts and stops. This serves as a smoke test for the distribution: it has all the dependencies it needs,
+ * and starts without problems.
  */
 public class ITLauncher {
     public static final DockerImageName JRE8_IMAGE = DockerImageName.parse("eclipse-temurin:8-jre");
