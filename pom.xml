@@ -16,7 +16,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
-        <slf4j.version>2.0.7</slf4j.version>
+        <slf4j.version>2.0.17</slf4j.version>
         <skipTests>false</skipTests>
         <skipUnitTests>${skipTests}</skipUnitTests>
         <skipIntegrationTests>${skipTests}</skipIntegrationTests>
@@ -29,62 +29,92 @@
         <dependency>
             <groupId>org.apache.lucene</groupId>
             <artifactId>lucene-core</artifactId>
-            <version>4.9.0</version>
+            <version>4.10.4</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.apache.lucene/lucene-queries -->
         <dependency>
             <groupId>org.apache.lucene</groupId>
             <artifactId>lucene-queries</artifactId>
-            <version>4.9.0</version>
+            <version>4.10.4</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.apache.lucene/lucene-queryparser -->
         <dependency>
             <groupId>org.apache.lucene</groupId>
             <artifactId>lucene-queryparser</artifactId>
-            <version>4.9.0</version>
+            <version>4.10.4</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.apache.lucene/lucene-analyzers-common -->
         <dependency>
             <groupId>org.apache.lucene</groupId>
             <artifactId>lucene-analyzers-common</artifactId>
-            <version>4.9.0</version>
+            <version>4.10.4</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/com.sleepycat/je -->
         <dependency>
             <groupId>com.sleepycat</groupId>
             <artifactId>je</artifactId>
-            <version>18.1.11</version>
+            <version>18.3.12</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.apache.poi/poi -->
         <dependency>
             <groupId>org.apache.poi</groupId>
             <artifactId>poi</artifactId>
-            <version>3.10.1</version>
+            <version>3.17</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.apache.poi/poi-excelant -->
         <dependency>
             <groupId>org.apache.poi</groupId>
             <artifactId>poi-excelant</artifactId>
-            <version>3.10.1</version>
+            <version>3.17</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <version>5.13.1</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.platform</groupId>
+            <artifactId>junit-platform-console</artifactId>
+            <version>1.13.1</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.platform</groupId>
+            <artifactId>junit-platform-launcher</artifactId>
+            <version>1.13.1</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.assertj</groupId>
+            <artifactId>assertj-core</artifactId>
+            <version>3.17.1</version>
+            <scope>test</scope>
+        </dependency>
+        <!-- causes warning for CVE-2020-15250 but is only used in test scope -->
+        <dependency>
+            <groupId>org.assertj</groupId>
+            <artifactId>assertj-swing</artifactId>
+            <version>3.17.1</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.assertj</groupId>
+            <artifactId>assertj-swing-junit</artifactId>
+            <version>3.17.1</version>
+            <scope>test</scope>
+        </dependency>
         <dependency>
             <groupId>com.github.caciocavallosilano</groupId>
             <artifactId>cacio-tta</artifactId>
-            <version>1.10</version>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.13.2</version>
+            <version>1.18</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.testcontainers</groupId>
             <artifactId>testcontainers</artifactId>
-            <version>1.18.3</version>
+            <version>1.21.1</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -97,12 +127,6 @@
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-simple</artifactId>
             <version>${slf4j.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter</artifactId>
-            <version>5.9.2</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -156,22 +180,55 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-surefire-plugin</artifactId>
-                    <version>3.1.2</version>
+                    <version>3.2.2</version>
                     <configuration>
+                        <forkCount>1</forkCount>
+                        <reuseForks>false</reuseForks>
                         <skipTests>${skipUnitTests}</skipTests>
+                        <systemPropertyVariables>
+                            <java.awt.headless>false</java.awt.headless>
+                            <awt.toolkit>com.github.caciocavallosilano.cacio.ctc.CTCToolkit</awt.toolkit>
+                            <java.awt.graphicsenv>com.github.caciocavallosilano.cacio.ctc.CTCGraphicsEnvironment</java.awt.graphicsenv>
+                        </systemPropertyVariables>
+                        <skipTests>${skipUnitTests}</skipTests>
+                        <argLine>
+                            -Doracle.jdbc.timezoneAsRegion=false
+                            -XX:+EnableDynamicAgentLoading
+                            <!-- Line(s) below are needed to keep TestSourceDataScan.updateEnv() working in java 17+
+                                 This is considered an acceptable hack since it only affects test code -->
+                            --add-exports=java.base/java.util=ALL-UNNAMED
+                            --add-opens=java.base/java.util=ALL-UNNAMED
+                            <!-- suppress exceptions from cacio-tta, see https://github.com/CaciocavalloSilano/caciocavallo -->
+                            --add-opens java.base/java.lang.reflect=ALL-UNNAMED
+                            --add-exports java.base/java.lang.reflect=ALL-UNNAMED
+                            --add-exports=java.desktop/java.awt=ALL-UNNAMED
+                            --add-exports=java.desktop/java.awt.peer=ALL-UNNAMED
+                            --add-exports=java.desktop/sun.awt.image=ALL-UNNAMED
+                            --add-exports=java.desktop/sun.java2d=ALL-UNNAMED
+                            --add-exports=java.desktop/java.awt.dnd.peer=ALL-UNNAMED
+                            --add-exports=java.desktop/sun.awt=ALL-UNNAMED
+                            --add-exports=java.desktop/sun.awt.event=ALL-UNNAMED
+                            --add-exports=java.desktop/sun.awt.datatransfer=ALL-UNNAMED
+                            --add-exports=java.base/sun.security.action=ALL-UNNAMED
+                            --add-opens=java.base/java.util=ALL-UNNAMED
+                            --add-opens=java.desktop/java.awt=ALL-UNNAMED
+                            --add-opens=java.desktop/sun.java2d=ALL-UNNAMED
+                            --add-opens=java.base/java.lang.reflect=ALL-UNNAMED
+                            --add-opens java.base/java.lang=ALL-UNNAMED
+                        </argLine>
                     </configuration>
-                    <dependencies>
+                    <!--dependencies>
                         <dependency>
                             <groupId>org.junit.jupiter</groupId>
                             <artifactId>junit-jupiter-api</artifactId>
-                            <version>5.9.2</version>
+                            <version>5.13.1</version>
                         </dependency>
                         <dependency>
                             <groupId>org.junit.vintage</groupId>
                             <artifactId>junit-vintage-engine</artifactId>
-                            <version>5.9.2</version>
+                            <version>5.13.1</version>
                         </dependency>
-                    </dependencies>
+                    </dependencies-->
                 </plugin>
             </plugins>
         </pluginManagement>
@@ -264,8 +321,15 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-failsafe-plugin</artifactId>
-                <version>2.18.1</version>
+                <version>3.2.2</version>
                 <configuration>
+                    <systemPropertyVariables>
+                        <propertyName>propertyValue</propertyName>
+                        <projectBuildDirectory>${project.build.directory}</projectBuildDirectory>
+                        <java.awt.headless>false</java.awt.headless>
+                    </systemPropertyVariables>
+                    <forkCount>1</forkCount>
+                    <reuseForks>false</reuseForks>
                     <includes>
                         <include>**/*IT.java</include>
                         <include>**/IT*.java</include>
@@ -302,6 +366,27 @@
                         </fileset>
                     </filesets>
                 </configuration>
+            </plugin>
+	    <plugin>
+                <groupId>org.owasp</groupId>
+                <artifactId>dependency-check-maven</artifactId>
+                <version>11.1.0</version>
+                <configuration>
+                    <failBuildOnCVSS>8</failBuildOnCVSS>
+                    <suppressionFiles>
+                        <!--suppressionFile>http://example.org/suppression.xml</suppressionFile-->
+                        <suppressionFile>project-suppression.xml</suppressionFile>
+                    </suppressionFiles>
+                </configuration>
+                <executions>
+                    <execution>
+                        <!-- Should only be run manually as it has a dependency on the .net sdk -->
+                        <phase>none</phase> <!-- only run on demand -->
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
         <resources>
