@@ -25,6 +25,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
@@ -73,7 +74,7 @@ public class ReadXlsxFile implements Iterable<List<String>> {
 			List<String> cells = new ArrayList<String>();
 			for (Cell cell : iterator.next()) {
 				String text;
-				if (cell.getCellType() == Cell.CELL_TYPE_NUMERIC)
+				if (cell.getCellType() == CellType.NUMERIC)
 					text = myFormatter.format(cell.getNumericCellValue());
 				else
 					text = cell.toString();
