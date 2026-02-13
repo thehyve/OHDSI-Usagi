@@ -1,52 +1,51 @@
 package org.ohdsi.usagi;
 
-import com.github.caciocavallosilano.cacio.ctc.junit.CacioAssertJRunner;
+import com.github.caciocavallosilano.cacio.ctc.junit.CacioTest;
 import org.assertj.swing.driver.ComponentShownWaiter;
 import org.assertj.swing.edt.GuiActionRunner;
 import org.assertj.swing.fixture.DialogFixture;
 import org.assertj.swing.fixture.FrameFixture;
 import org.assertj.swing.fixture.JTextComponentFixture;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import org.junit.internal.TextListener;
-import org.junit.runner.JUnitCore;
-import org.junit.runner.Result;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.platform.engine.discovery.DiscoverySelectors.selectClass;
+import org.junit.platform.launcher.LauncherDiscoveryRequest;
+import org.junit.platform.launcher.core.LauncherDiscoveryRequestBuilder;
+import org.junit.platform.launcher.core.LauncherFactory;
 
 import javax.swing.*;
 
 import java.lang.reflect.InvocationTargetException;
 
-import static org.junit.Assert.*;
-
 import org.ohdsi.usagi.ui.AboutDialog;
 import org.ohdsi.usagi.ui.AuthorDialog;
+import org.ohdsi.usagi.ui.GUITestExtension;
 import org.ohdsi.usagi.ui.UsagiMain;
 
-/*
- * CacioTestRunner enables running the Swing GUI tests in a virtual screen. This allows the integration tests to run
- * anywhere without being blocked by the absence of a real screen (e.g. github actions), and without being
- * disrupted by unrelated user activity on workstations/laptops (any keyboard or mouse action).
- * For debugging purposes, you can disable the annotation below to have the tests run on your screen. Be aware that
- * any interaction with mouse or keyboard can (will) disrupt the tests if they run on your screen.
- */
-@RunWith(CacioAssertJRunner.class)
+@ExtendWith(GUITestExtension.class)
+@CacioTest  // causes test(s) to run in a virtual display environment; disable this to see the test(s) run on your screen
 public class TestLauncher {
     private final static int WIDTH = 1920;
     private final static int HEIGHT = 1080;
 
-    public static void main(String[] args) {
-        JUnitCore junit = new JUnitCore();
-        junit.addListener(new TextListener(System.out));
-        Result result = junit.run(TestLauncher.class);
-        if (!result.wasSuccessful()) {
-            System.out.println("test failed!");
-        }
-        System.exit(result.wasSuccessful() ? 0 : 1);
+    /**
+     * Main method to run the tests in this class.
+     * This is used to run the tests from an IDE or command line.
+     * It uses JUnit Platform Launcher to discover and execute tests.
+     */
+    public static void main(String[] args) throws InterruptedException {
+        LauncherDiscoveryRequest request = LauncherDiscoveryRequestBuilder.request()
+                .selectors(selectClass(TestLauncher.class))
+                .build();
+        org.junit.platform.launcher.Launcher launcher = LauncherFactory.create();
+        launcher.execute(request);
     }
 
-    @BeforeClass
+    @BeforeAll
     public static void setupOnce() {
         System.setProperty("cacio.managed.screensize", String.format("%sx%s", WIDTH, HEIGHT));
     }
@@ -54,7 +53,7 @@ public class TestLauncher {
     private FrameFixture window;
     private UsagiMain usagiMain;
 
-    @Before
+    @BeforeEach
     public void onSetUp() {
         String[] args = {};
         usagiMain = GuiActionRunner.execute(() -> new UsagiMain(false, args));

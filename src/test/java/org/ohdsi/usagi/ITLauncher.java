@@ -1,7 +1,6 @@
 package org.ohdsi.usagi;
 
-import org.junit.ClassRule;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testcontainers.containers.Container;
@@ -24,12 +23,11 @@ import static org.junit.Assert.assertEquals;
  * and starts without problems.
  */
 public class ITLauncher {
-    public static final DockerImageName JRE8_IMAGE = DockerImageName.parse("eclipse-temurin:8-jre");
+    public static final DockerImageName JRE8_IMAGE = DockerImageName.parse("eclipse-temurin:17-jre");
 
     private static final String usagiTestJarPath = Paths.get("target", "Usagi-test.jar").toAbsolutePath().toString();
 
     private static Logger LOGGER = LoggerFactory.getLogger(ITLauncher.class);
-    @ClassRule
     public static GenericContainer<?> jre8Container = new GenericContainer<>(JRE8_IMAGE)
             .withCopyToContainer(MountableFile.forHostPath(usagiTestJarPath), "/tmp/Usagi-test.jar")
             .withCommand("/bin/sh", "-c", "tail -f /dev/null") // keeps the container running until it is explicitly stopped
@@ -44,8 +42,12 @@ public class ITLauncher {
         assertEquals(0, installCommand.getExitCode());
         // run the test, check that it ran well
         Container.ExecResult javaRunCommand = jre8Container.execInContainer("/bin/sh", "-c", "java -jar /tmp/Usagi-test.jar");
+        if (javaRunCommand.getExitCode() == 0) {
+            System.out.println("stdout: " + javaRunCommand.getStdout()); // so satisfying to see a test was OK :-)
+        } else {
+            System.out.println("stderr: " + javaRunCommand.getStderr());
+        }
         assertEquals(0, javaRunCommand.getExitCode());
-        System.out.println(javaRunCommand.getStdout()); // so satisfying to see a test was OK :-)
         jre8Container.stop();
     }
 }
