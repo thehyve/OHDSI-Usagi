@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<suppressions xmlns="https://jeremylong.github.io/DependencyCheck/dependency-suppression.1.4.xsd">
+   <!-- Suppress false positives. CVE-2018-014718 and CVE-2007-5897 apply to the C/C++ version of Berkeley DB and its native utilities (db_archive, db_recover), not the pure Java Edition (JE).
+	Both CVEs are matched through Oracle components on which the Java edition of Berkeley DB does not depend -->
+   <suppress>
+      <notes><![CDATA[
+      file name: je-18.3.12.jar
+      ]]></notes>
+      <packageUrl regex="true">^pkg:maven/com\.sleepycat/je@.*$</packageUrl>
+      <cpe>cpe:/a:oracle:database:18.3.12</cpe>
+      <cpe>cpe:/a:oracle:database_server</cpe>
+      <cpe>cpe:/a:oracle:nosql_database</cpe>
+      <cpe>cpe:/a:oracle:oracle_database:18.3.12</cpe>
+   </suppress>
+</suppressions>
