@@ -60,13 +60,20 @@ Usagi is licensed under Apache License 2.0.
 
 Development
 ===========
-Usagi is built through maven.
-There are unit & integration tests (the integration tests depends on Docker/TestContainers).
+Usagi is built using maven. You will need a Java 17 JDK (or higher) to build Usagi.
+There are unit & integration tests (the integration tests depend on Docker/TestContainers).
 Before submitting a pull request, please make sure these tests run (by using `mvn clean verify`).
 
 Some unit tests for the GUI depend on [cacio-tta](https://github.com/CaciocavalloSilano/caciocavallo) for
 running the GUI tests headless, see `TestLauncher.java` for some more information on that, including on how
 to switch it off to be able to see the tests run when developing/debugging these tests.F
+
+### Security
+The maven plugin `dependency-check-maven` is used to check for known vulnerabilities in the dependencies.
+To run this plugin, execute `mvn dependency-check:check` from the command line. By default, the build
+will fail if any vulnerabilities with a CVSS score of 8.0 or higher are found. All vulnerabilities are reported.
+There may be false positives. In this case, use the file `project-suppression.xml` to suppress the false positives.
+
 ### Development status
 Ready for use.
 
