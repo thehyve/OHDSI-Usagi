@@ -424,6 +424,33 @@
                 </configuration>
             </plugin>
             <plugin>
+                <!--
+                  While the source and target Java versions are still 1.8, Java 17+ is required to be able to use
+                  recent versions of test and verification tools. This plugin enforces the required Java version range,
+                  and gives a cleaner error message than failing on a dependency that is not compatible with an
+                  older version of Java.
+                  Java 22 and higher are not supported yet due to issues with some old sun libs.
+                  -->
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-enforcer-plugin</artifactId>
+                <version>3.4.1</version>
+                <executions>
+                    <execution>
+                        <id>enforce-java</id>
+                        <goals>
+                            <goal>enforce</goal>
+                        </goals>
+                        <configuration>
+                            <rules>
+                                <requireJavaVersion>
+                                    <version>[17,22)</version>
+                                </requireJavaVersion>
+                            </rules>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
                 <groupId>org.owasp</groupId>
                 <artifactId>dependency-check-maven</artifactId>
                 <version>12.2.0</version>
