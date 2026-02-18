@@ -20,6 +20,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -160,6 +162,52 @@ class BerkeleyDbBuilderTest {
         assertNotNull(conceptIdToAtcCode, "ATC code map should not be null");
         assertEquals(1, conceptIdToAtcCode.size(), "Should have 1 ATC code mapping");
         assertEquals("A01BC23", conceptIdToAtcCode.get(789), "ATC code should match");
+    }
+
+    @Test
+    void testBuildIndexWithZipResource() throws IOException {
+        // Prepare the vocabulary folder by unzipping the resource
+        Path zipVocabFolder = tempDir.resolve("zip_vocab");
+        Files.createDirectories(zipVocabFolder);
+
+        try (ZipInputStream zis = new ZipInputStream(
+                getClass().getResourceAsStream("/OMOP-vocabularies-minimal.zip"))) {
+            ZipEntry entry;
+            while ((entry = zis.getNextEntry()) != null) {
+                Path filePath = zipVocabFolder.resolve(entry.getName());
+                Files.copy(zis, filePath);
+                zis.closeEntry();
+            }
+        }
+
+        // Set up the Global folder for the database in a separate subfolder
+        Path dbFolder = tempDir.resolve("zip_db");
+        Files.createDirectories(dbFolder);
+        Global.folder = dbFolder.toString();
+
+        // Build the index
+        berkeleyDbBuilder.buildIndex(
+                zipVocabFolder.toString(),
+                null, // No LOINC file
+                testProgressReporter
+        );
+
+        // Open the database for reading
+        dbEngine = new BerkeleyDbEngine(Global.folder);
+        dbEngine.openForReading();
+
+        // Verify a known concept from the zip was loaded
+        // From our analysis: 1146945	concept.concept_id	Metadata	CDM	Field	S	CDM1
+        Concept concept = dbEngine.getConcept(1146945);
+        assertNotNull(concept, "Concept 1146945 should be loaded from zip");
+        assertEquals("concept.concept_id", concept.conceptName);
+        assertEquals("Metadata", concept.domainId);
+        assertEquals("CDM", concept.vocabularyId);
+
+        // Verify another concept
+        Concept concept2 = dbEngine.getConcept(756315);
+        assertNotNull(concept2, "Concept 756315 should be loaded from zip");
+        assertEquals("metadata.metadata_type_concept_id", concept2.conceptName);
     }
 
     // Helper methods to create test files
