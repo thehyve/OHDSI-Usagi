@@ -49,6 +49,8 @@ public class UsagiMain implements ActionListener {
 	public static final String NO_VERSION = "(no version)";
 
 	public static void main(String[] args) {
+		System.setProperty("awt.useSystemAAFontSettings", "on");
+		System.setProperty("swing.aatext", "true");
 		new UsagiMain(true, args);
 	}
 
