@@ -77,7 +77,9 @@ public class AboutDialog extends JDialog {
 						"<li>Narrower = The target contains less information than the source.</li>" +
 						"<li>Inexact = The target overlaps with the source, but both source and target cover additional meaning.</li>" +
 						"<li>Unmatched = There is no match for this concept in the target code system.</li>" +
-						"</ul>"
+						"</ul>" +
+						"<br/><br/>" +
+						"Java version: " + System.getProperty("java.version")
 		);
 
 		text.setEditable(false);
