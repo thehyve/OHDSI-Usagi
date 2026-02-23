@@ -49,6 +49,7 @@ public class UsagiMain implements ActionListener {
 	public static final String NO_VERSION = "(no version)";
 
 	public static void main(String[] args) {
+		// Enable anti-aliasing for Swing components on systems where it is not enabled by default:
 		System.setProperty("awt.useSystemAAFontSettings", "on");
 		new UsagiMain(true, args);
 	}
