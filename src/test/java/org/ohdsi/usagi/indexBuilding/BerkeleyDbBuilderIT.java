@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 import org.ohdsi.usagi.BerkeleyDbEngine;
 import org.ohdsi.usagi.Concept;
+import org.ohdsi.usagi.TestUtils;
 import org.ohdsi.usagi.MapsToRelationship;
 import org.ohdsi.usagi.ParentChildRelationShip;
 import org.ohdsi.usagi.ui.Global;
@@ -170,15 +171,7 @@ class BerkeleyDbBuilderIT {
         Path zipVocabFolder = tempDir.resolve("zip_vocab");
         Files.createDirectories(zipVocabFolder);
 
-        try (ZipInputStream zis = new ZipInputStream(
-                getClass().getResourceAsStream("/OMOP-vocabularies-minimal.zip"))) {
-            ZipEntry entry;
-            while ((entry = zis.getNextEntry()) != null) {
-                Path filePath = zipVocabFolder.resolve(entry.getName());
-                Files.copy(zis, filePath);
-                zis.closeEntry();
-            }
-        }
+        TestUtils.unzipResource("/OMOP-vocabularies-minimal.zip", zipVocabFolder);
 
         // Set up the Global folder for the database in a separate subfolder
         Path dbFolder = tempDir.resolve("zip_db");

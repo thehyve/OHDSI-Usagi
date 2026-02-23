@@ -12,6 +12,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
+import org.ohdsi.usagi.TestUtils;
+
 import javax.swing.*;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -60,7 +62,7 @@ public class UsagiMainIT {
         // Unzip OMOP vocabularies
         vocabDir = tempDir.resolve("vocab");
         Files.createDirectories(vocabDir);
-        unzipResource("/OMOP-vocabularies-minimal.zip", vocabDir);
+        TestUtils.unzipResource("/OMOP-vocabularies-minimal.zip", vocabDir);
 
         // Prepare UsagiMain
         String[] args = {tempDir.toAbsolutePath().toString()};
@@ -163,26 +165,4 @@ public class UsagiMainIT {
         restartPane.okButton().click();
     }
 
-    private void unzipResource(String resourceName, Path targetDir) throws IOException {
-        try (InputStream is = getClass().getResourceAsStream(resourceName);
-             ZipInputStream zis = new ZipInputStream(is)) {
-            ZipEntry entry;
-            while ((entry = zis.getNextEntry()) != null) {
-                File newFile = new File(targetDir.toFile(), entry.getName());
-                if (entry.isDirectory()) {
-                    newFile.mkdirs();
-                } else {
-                    newFile.getParentFile().mkdirs();
-                    try (FileOutputStream fos = new FileOutputStream(newFile)) {
-                        byte[] buffer = new byte[1024];
-                        int len;
-                        while ((len = zis.read(buffer)) > 0) {
-                            fos.write(buffer, 0, len);
-                        }
-                    }
-                }
-                zis.closeEntry();
-            }
-        }
-    }
 }
