@@ -25,7 +25,7 @@ import java.util.zip.ZipInputStream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class BerkeleyDbBuilderTest {
+class BerkeleyDbBuilderIT {
 
     @TempDir
     Path tempDir;

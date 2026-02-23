@@ -2,17 +2,14 @@ package org.ohdsi.usagi.ui;
 
 import com.github.caciocavallosilano.cacio.ctc.junit.CacioTest;
 import org.assertj.swing.core.GenericTypeMatcher;
-import org.assertj.swing.edt.GuiActionRunner;
 import org.assertj.swing.finder.WindowFinder;
 import org.assertj.swing.fixture.DialogFixture;
 import org.assertj.swing.fixture.FrameFixture;
-import org.assertj.swing.fixture.JButtonFixture;
 import org.assertj.swing.fixture.JOptionPaneFixture;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.io.TempDir;
 
 import javax.swing.*;
@@ -28,7 +25,7 @@ import java.util.zip.ZipInputStream;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @CacioTest
-public class UsagiMainTest {
+public class UsagiMainIT {
     private final static int WIDTH = 1920;
     private final static int HEIGHT = 1080;
 
