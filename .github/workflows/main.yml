@@ -26,13 +26,17 @@ jobs:
       - uses: actions/setup-java@v3
         with:
           distribution: temurin
-          java-version: 8
+          java-version: 17
           cache: maven
 
       # Compile the code
       - name: Compile code
         run: mvn install -DskipTests
 
-      # Gradle check
-      - name: Check
+      # Unit tests
+      - name: UnitTests
         run: mvn test
+
+      # Integration tests
+      - name: IntegrationTest
+        run: mvn verify
