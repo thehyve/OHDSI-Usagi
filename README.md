@@ -64,6 +64,8 @@ Usagi is built using maven. You will need a Java 17 JDK (or higher) to build Usa
 There are unit & integration tests (the integration tests depend on Docker/TestContainers).
 Before submitting a pull request, please make sure these tests run (by using `mvn clean verify`).
 
+The integration tests require Docker to be installed and available to the user running the tests.
+
 Some unit tests for the GUI depend on [cacio-tta](https://github.com/CaciocavalloSilano/caciocavallo) for
 running the GUI tests headless, see `TestLauncher.java` for some more information on that, including on how
 to switch it off to be able to see the tests run when developing/debugging these tests.
