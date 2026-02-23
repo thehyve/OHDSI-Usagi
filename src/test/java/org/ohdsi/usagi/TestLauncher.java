@@ -9,7 +9,7 @@ import org.assertj.swing.fixture.JTextComponentFixture;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
+
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.platform.engine.discovery.DiscoverySelectors.selectClass;
@@ -23,10 +23,8 @@ import java.lang.reflect.InvocationTargetException;
 
 import org.ohdsi.usagi.ui.AboutDialog;
 import org.ohdsi.usagi.ui.AuthorDialog;
-import org.ohdsi.usagi.ui.GUITestExtension;
 import org.ohdsi.usagi.ui.UsagiMain;
 
-@ExtendWith(GUITestExtension.class)
 @CacioTest  // causes test(s) to run in a virtual display environment; disable this to see the test(s) run on your screen
 public class TestLauncher {
     private final static int WIDTH = 1920;

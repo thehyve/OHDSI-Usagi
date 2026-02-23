@@ -344,7 +344,7 @@
             </plugin>
             <plugin>
                 <!-- the maven-assembly-plugin takes care of building a fat jar that executes a smoke test for
-                     RabbitInAHat (also uses src/main/assembly/assembly.xml)
+                     Usagi (also uses src/main/assembly/assembly.xml)
                      The main objective is to establish that the distributed jar is complete with all
                      dependencies -->
                 <artifactId>maven-assembly-plugin</artifactId>

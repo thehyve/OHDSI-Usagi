@@ -27,7 +27,6 @@ import java.util.zip.ZipInputStream;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-@ExtendWith(GUITestExtension.class)
 @CacioTest
 public class UsagiMainTest {
     private final static int WIDTH = 1920;
