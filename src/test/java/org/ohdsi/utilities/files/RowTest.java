@@ -36,6 +36,7 @@ class RowTest {
         testFieldMap.put("field3", 2);
         testFieldMap.put("field4", 3);
         testFieldMap.put("field5", 4);
+        testFieldMap.put("field6", 5);
 
         // Create a populated row
         populatedRow = new Row(testCells, testFieldMap);
@@ -51,7 +52,7 @@ class RowTest {
     @Test
     void testConstructorWithData() {
         assertEquals(5, populatedRow.size(), "Row should have 5 cells");
-        assertEquals(5, populatedRow.getFieldNames().size(), "Row should have 5 field names");
+        assertEquals(6, populatedRow.getFieldNames().size(), "Row should have 6 field names");
         assertEquals("value1", populatedRow.get("field1"), "field1 should have value 'value1'");
         assertEquals("123", populatedRow.get("field2"), "field2 should have value '123'");
     }
@@ -172,7 +173,7 @@ class RowTest {
     @Test
     void testGetFieldNames() {
         List<String> fieldNames = populatedRow.getFieldNames();
-        assertEquals(5, fieldNames.size(), "getFieldNames should return all field names");
+        assertEquals(6, fieldNames.size(), "getFieldNames should return all field names");
         assertTrue(fieldNames.contains("field1"), "Field names should include field1");
         assertTrue(fieldNames.contains("field2"), "Field names should include field2");
     }
