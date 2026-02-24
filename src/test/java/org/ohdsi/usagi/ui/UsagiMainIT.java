@@ -1,6 +1,4 @@
 package org.ohdsi.usagi.ui;
-
-import com.github.caciocavallosilano.cacio.ctc.junit.CacioTest;
 import org.assertj.swing.core.GenericTypeMatcher;
 import org.assertj.swing.finder.WindowFinder;
 import org.assertj.swing.fixture.DialogFixture;
@@ -12,6 +10,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
+import org.ohdsi.usagi.CacioTestBase;
 import org.ohdsi.usagi.TestUtils;
 
 import javax.swing.*;
@@ -26,10 +25,7 @@ import java.util.zip.ZipInputStream;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-@CacioTest
-public class UsagiMainIT {
-    private final static int WIDTH = 1920;
-    private final static int HEIGHT = 1080;
+public class UsagiMainIT extends CacioTestBase {
 
     @TempDir
     Path tempDir;
@@ -39,10 +35,6 @@ public class UsagiMainIT {
     private UsagiMain usagiMain;
     private Path vocabDir;
 
-    @BeforeAll
-    public static void setupOnce() {
-        System.setProperty("cacio.managed.screensize", String.format("%sx%s", WIDTH, HEIGHT));
-    }
 
     @BeforeEach
     public void onSetUp() {
@@ -90,7 +82,7 @@ public class UsagiMainIT {
     }
 
     @AfterEach
-    public void tearDown() {
+    public void tearDownUsagi() {
         if (window != null) {
             window.cleanUp();
         }

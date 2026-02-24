@@ -49,8 +49,6 @@ public class UsagiMain implements ActionListener {
 	public static final String NO_VERSION = "(no version)";
 
 	public static void main(String[] args) {
-		// Enable anti-aliasing for Swing components on systems where it is not enabled by default:
-		System.setProperty("awt.useSystemAAFontSettings", "on");
 		new UsagiMain(true, args);
 	}
 
@@ -59,6 +57,8 @@ public class UsagiMain implements ActionListener {
 	private boolean skipRebuildIndexAction = false;
 
 	public UsagiMain(boolean doInitialize, String[] args) {
+		// Enable anti-aliasing for Swing components on systems where it is not enabled by default:
+		System.setProperty("awt.useSystemAAFontSettings", "on");
 		frame = new JFrame("Usagi v" + UsagiMain.version);
 		if (doInitialize) {
 			initializeUsagi(args);

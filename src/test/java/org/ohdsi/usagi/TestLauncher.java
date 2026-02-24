@@ -1,12 +1,10 @@
 package org.ohdsi.usagi;
 
-import com.github.caciocavallosilano.cacio.ctc.junit.CacioTest;
 import org.assertj.swing.driver.ComponentShownWaiter;
 import org.assertj.swing.edt.GuiActionRunner;
 import org.assertj.swing.fixture.DialogFixture;
 import org.assertj.swing.fixture.FrameFixture;
 import org.assertj.swing.fixture.JTextComponentFixture;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -25,10 +23,7 @@ import org.ohdsi.usagi.ui.AboutDialog;
 import org.ohdsi.usagi.ui.AuthorDialog;
 import org.ohdsi.usagi.ui.UsagiMain;
 
-@CacioTest  // causes test(s) to run in a virtual display environment; disable this to see the test(s) run on your screen
-public class TestLauncher {
-    private final static int WIDTH = 1920;
-    private final static int HEIGHT = 1080;
+public class TestLauncher extends CacioTestBase {
 
     /**
      * Main method to run the tests in this class.
@@ -43,10 +38,6 @@ public class TestLauncher {
         launcher.execute(request);
     }
 
-    @BeforeAll
-    public static void setupOnce() {
-        System.setProperty("cacio.managed.screensize", String.format("%sx%s", WIDTH, HEIGHT));
-    }
 
     private FrameFixture window;
     private UsagiMain usagiMain;
@@ -60,8 +51,7 @@ public class TestLauncher {
     }
 
     @Test
-    public void closeRIAH() throws InterruptedException {
-        //robot().settings().delayBetweenEvents(5000);
+    public void openAndCloseUsagi() throws InterruptedException {
         //
         // A dialog will be opened during initialization, before the RIAH application becomes available
         // for interaction. Since the only goal of this test is confirming that the application can be started,
