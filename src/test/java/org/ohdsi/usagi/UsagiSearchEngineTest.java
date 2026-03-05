@@ -30,6 +30,8 @@ class UsagiSearchEngineTest {
     void setUp() throws IOException {
         testFolder = tempDir.toString();
         Global.folder = testFolder;
+        Global.dbEngine = new BerkeleyDbEngine(testFolder);
+        Global.dbEngine.createDatabase();
         searchEngine = new UsagiSearchEngine(testFolder);
     }
 
@@ -37,6 +39,9 @@ class UsagiSearchEngineTest {
     void tearDown() {
         if (searchEngine != null) {
             searchEngine.close();
+        }
+        if (Global.dbEngine != null) {
+            Global.dbEngine.shutdown();
         }
     }
 

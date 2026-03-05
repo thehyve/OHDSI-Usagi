@@ -138,6 +138,7 @@ public class MappingDetailPanel extends JPanel implements CodeSelectedListener, 
 		c.weightx = 1;
 		c.gridwidth = GridBagConstraints.REMAINDER;
 		manualQueryField = new JTextField("");
+		manualQueryField.setName("manualQueryField");
 		// manualQueryField.setPreferredSize(new Dimension(200, 5));
 		manualQueryField.getDocument().addDocumentListener(new DocumentListener() {
 
@@ -169,6 +170,7 @@ public class MappingDetailPanel extends JPanel implements CodeSelectedListener, 
 		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 		searchTableModel = new ConceptTableModel(true);
 		searchTable = new UsagiTable(searchTableModel);
+		searchTable.setName("searchResultsTable");
 		sorter = new TableRowSorter<ConceptTableModel>(searchTableModel);
 		searchTable.setRowSorter(sorter);
 		searchTable.setPreferredScrollableViewportSize(new Dimension(100, 100));

@@ -130,6 +130,7 @@ public class UsagiMain implements ActionListener {
 			}
 		});
 		frame.setLayout(new BorderLayout());
+		frame.setName("UsagiMainFrame");
 		frame.setJMenuBar(new UsagiMenubar());
 
 		JPanel main = new JPanel();

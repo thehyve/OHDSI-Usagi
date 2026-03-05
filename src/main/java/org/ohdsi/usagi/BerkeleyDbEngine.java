@@ -78,45 +78,64 @@ public class BerkeleyDbEngine {
 
 	public BerkeleyDbStats getStats() {
 		BerkeleyDbStats berkeleyDbStats = new BerkeleyDbStats();
-		berkeleyDbStats.conceptCount = store.getPrimaryIndex(Integer.class, Concept.class).count();
-		berkeleyDbStats.mapsToRelationshipCount = store.getPrimaryIndex(Integer.class, MapsToRelationship.class).count();
-		berkeleyDbStats.parentChildCount = store.getPrimaryIndex(Integer.class, ParentChildRelationShip.class).count();
+		if (isOpenForReading || isOpenForWriting) {
+			berkeleyDbStats.conceptCount = store.getPrimaryIndex(Integer.class, Concept.class).count();
+			berkeleyDbStats.mapsToRelationshipCount = store.getPrimaryIndex(Integer.class, MapsToRelationship.class).count();
+			berkeleyDbStats.parentChildCount = store.getPrimaryIndex(Integer.class, ParentChildRelationShip.class).count();
+		}
 		return berkeleyDbStats;
 	}
 
 	public void put(Concept concept) {
-		conceptDataAccessor.primaryIndex.putNoReturn(concept);
+		if (isOpenForWriting) {
+			conceptDataAccessor.primaryIndex.putNoReturn(concept);
+		}
 	}
 
 	public void put(MapsToRelationship mapsToRelationship) {
-		mapsToRelationshipDataAccessor.primaryIndex.putNoReturn(mapsToRelationship);
+		if (isOpenForWriting) {
+			mapsToRelationshipDataAccessor.primaryIndex.putNoReturn(mapsToRelationship);
+		}
 	}
 
 	public void putAtcToRxNorm(String atc, int conceptId) {
-		AtcToRxNorm atcToRxNorm = atcToRxNormDataAccessor.primaryIndex.get(atc);
-		if (atcToRxNorm == null) {
-			atcToRxNorm = new AtcToRxNorm(atc);
+		if (isOpenForWriting) {
+			AtcToRxNorm atcToRxNorm = atcToRxNormDataAccessor.primaryIndex.get(atc);
+			if (atcToRxNorm == null) {
+				atcToRxNorm = new AtcToRxNorm(atc);
+			}
+			atcToRxNorm.conceptIds.add(conceptId);
+			atcToRxNormDataAccessor.primaryIndex.putNoReturn(atcToRxNorm);
 		}
-		atcToRxNorm.conceptIds.add(conceptId);
-		atcToRxNormDataAccessor.primaryIndex.putNoReturn(atcToRxNorm);
 	}
 
 	public void put(ParentChildRelationShip parentChildRelationship) {
-		parentChildRelationshipDataAccessor.primaryIndex.putNoReturn(parentChildRelationship);
+		if (isOpenForWriting) {
+			parentChildRelationshipDataAccessor.primaryIndex.putNoReturn(parentChildRelationship);
+		}
 	}
 
 	public EntityCursor<Concept> getConceptCursor() {
-		return conceptDataAccessor.primaryIndex.entities();
+		if (isOpenForReading || isOpenForWriting) {
+			return conceptDataAccessor.primaryIndex.entities();
+		}
+		return null;
 	}
 
 	public MapsToRelationship getMapsToRelationship(int conceptId) {
-		return mapsToRelationshipDataAccessor.primaryIndex.get(conceptId);
+		if (isOpenForReading || isOpenForWriting) {
+			return mapsToRelationshipDataAccessor.primaryIndex.get(conceptId);
+		}
+		return null;
 	}
 
 	public List<MapsToRelationship> getMapsToRelationshipsByConceptId2(int conceptId) {
+		List<MapsToRelationship> relationships = new ArrayList<MapsToRelationship>();
+		if (!(isOpenForReading || isOpenForWriting)) {
+			return relationships;
+		}
 		EntityIndex<Integer, MapsToRelationship> subIndex = mapsToRelationshipDataAccessor.secondaryIndex.subIndex(conceptId);
 		EntityCursor<MapsToRelationship> cursor = subIndex.entities();
-		List<MapsToRelationship> relationships = new ArrayList<MapsToRelationship>();
 		try {
 			for (MapsToRelationship relationship : cursor)
 				relationships.add(relationship);
@@ -127,17 +146,23 @@ public class BerkeleyDbEngine {
 	}
 
 	public Set<Integer> getRxNormConceptIds(String atc) {
-		AtcToRxNorm atcToRxNorm = atcToRxNormDataAccessor.primaryIndex.get(atc);
-		if (atcToRxNorm == null)
-			return Collections.emptySet();
-		else
-			return atcToRxNorm.conceptIds;
+		if (isOpenForReading || isOpenForWriting) {
+			AtcToRxNorm atcToRxNorm = atcToRxNormDataAccessor.primaryIndex.get(atc);
+			if (atcToRxNorm == null)
+				return Collections.emptySet();
+			else
+				return atcToRxNorm.conceptIds;
+		}
+		return Collections.emptySet();
 	}
 
 	public List<ParentChildRelationShip> getParentChildRelationshipsByParentConceptId(int conceptId) {
+		List<ParentChildRelationShip> relationships = new ArrayList<ParentChildRelationShip>();
+		if (!(isOpenForReading || isOpenForWriting)) {
+			return relationships;
+		}
 		EntityIndex<Integer, ParentChildRelationShip> subIndex = parentChildRelationshipDataAccessor.secondaryIndexParent.subIndex(conceptId);
 		EntityCursor<ParentChildRelationShip> cursor = subIndex.entities();
-		List<ParentChildRelationShip> relationships = new ArrayList<ParentChildRelationShip>();
 		try {
 			for (ParentChildRelationShip relationship : cursor)
 				relationships.add(relationship);
@@ -148,9 +173,12 @@ public class BerkeleyDbEngine {
 	}
 
 	public List<ParentChildRelationShip> getParentChildRelationshipsByChildConceptId(int conceptId) {
+		List<ParentChildRelationShip> relationships = new ArrayList<ParentChildRelationShip>();
+		if (!(isOpenForReading || isOpenForWriting)) {
+			return relationships;
+		}
 		EntityIndex<Integer, ParentChildRelationShip> subIndex = parentChildRelationshipDataAccessor.secondaryIndexChild.subIndex(conceptId);
 		EntityCursor<ParentChildRelationShip> cursor = subIndex.entities();
-		List<ParentChildRelationShip> relationships = new ArrayList<ParentChildRelationShip>();
 		try {
 			for (ParentChildRelationShip relationship : cursor)
 				relationships.add(relationship);
@@ -161,7 +189,10 @@ public class BerkeleyDbEngine {
 	}
 
 	public Concept getConcept(int conceptId) {
-		return conceptDataAccessor.primaryIndex.get(conceptId);
+		if (isOpenForReading || isOpenForWriting) {
+			return conceptDataAccessor.primaryIndex.get(conceptId);
+		}
+		return null;
 	}
 
 	public void shutdown() throws DatabaseException {
@@ -169,6 +200,8 @@ public class BerkeleyDbEngine {
 			if (isOpenForReading || isOpenForWriting) {
 				store.close();
 				dbEnvironment.close();
+				isOpenForReading = false;
+				isOpenForWriting = false;
 			}
 		} catch (DatabaseException dbe) {
 			throw new RuntimeException(dbe);
