@@ -25,6 +25,13 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     </properties>
 
+    <repositories>
+        <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
+        </repository>
+    </repositories>
+
     <dependencies>
         <!-- https://mvnrepository.com/artifact/org.apache.lucene/lucene-core -->
         <dependency>
@@ -113,7 +120,6 @@
             <version>3.27.6</version>
             <scope>test</scope>
         </dependency>
-        <!-- causes warning for CVE-2020-15250 but is only used in test scope -->
         <dependency>
             <groupId>org.assertj</groupId>
             <artifactId>assertj-swing</artifactId>
@@ -126,10 +132,21 @@
             <version>3.17.1</version>
             <scope>test</scope>
         </dependency>
-        <dependency>
+        <!-- dependency>
             <groupId>com.github.caciocavallosilano</groupId>
             <artifactId>cacio-tta</artifactId>
             <version>1.18</version>
+            <scope>test</scope>
+        </dependency -->
+	<!--
+	     cacio-tta 1.18 (above) is not JDK 25 ready, but a branch that is JDK 25 ready is already available.
+	     For now, depend on a github commit id for the above dependency until version 1.19 is available
+	     This is deemed acceptable as the dependency is for the test scope only, and does not become part of the released Jar
+	 -->
+	<dependency>
+            <groupId>com.github.caciocavallosilano</groupId>
+            <artifactId>caciocavallo</artifactId>
+            <version>71a93cd</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -434,7 +451,6 @@
                   recent versions of test and verification tools. This plugin enforces the required Java version range,
                   and gives a cleaner error message than failing on a dependency that is not compatible with an
                   older version of Java.
-                  Java 22 and higher are not supported yet due to issues with some old sun libs.
                   -->
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-enforcer-plugin</artifactId>
@@ -448,7 +464,7 @@
                         <configuration>
                             <rules>
                                 <requireJavaVersion>
-                                    <version>[17,22)</version>
+                                    <version>[17,26)</version>
                                 </requireJavaVersion>
                             </rules>
                         </configuration>
