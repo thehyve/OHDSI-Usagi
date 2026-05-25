@@ -23,7 +23,7 @@ import static org.junit.Assert.assertEquals;
  * and starts without problems.
  */
 public class ITLauncher {
-    public static final DockerImageName JRE8_IMAGE = DockerImageName.parse("eclipse-temurin:17-jre");
+    public static final DockerImageName JRE8_IMAGE = DockerImageName.parse("eclipse-temurin:25-jre");
 
     private static final String usagiTestJarPath = Paths.get("target", "Usagi-test.jar").toAbsolutePath().toString();
 

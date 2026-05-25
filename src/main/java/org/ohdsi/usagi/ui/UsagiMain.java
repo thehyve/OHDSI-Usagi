@@ -46,7 +46,7 @@ import org.ohdsi.utilities.files.ReadTextFile;
 public class UsagiMain implements ActionListener {
 
 	private static final String version = getVersionFromProperties();
-	public static final String NO_VERSION = "(no version)";
+	public static final String NO_VERSION = "(version not available)";
 
 	public static void main(String[] args) {
 		new UsagiMain(true, args);
@@ -252,12 +252,12 @@ public class UsagiMain implements ActionListener {
 		final Properties properties = new Properties();
 		try {
 			properties.load(UsagiMain.class.getClassLoader().getResourceAsStream("project.properties"));
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		}
-		String versionProperty = properties.getProperty("org.ohdsi.usagi.version");
-		if (versionProperty != null && !versionProperty.isEmpty()) {
-			version = versionProperty;
+			String versionProperty = properties.getProperty("org.ohdsi.usagi.version");
+			if (versionProperty != null && !versionProperty.isEmpty()) {
+				version = versionProperty;
+			}
+		} catch (Exception e) {
+			//throw new RuntimeException(e);
 		}
 		return version;
 	}
