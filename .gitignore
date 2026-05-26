@@ -4,6 +4,7 @@ dist/
 target/
 
 .java-version
+.junie/
 
 ### Usagi index files ###
 derivedIndex/
