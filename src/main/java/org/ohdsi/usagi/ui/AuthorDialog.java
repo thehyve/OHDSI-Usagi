@@ -42,6 +42,7 @@ public class AuthorDialog extends JDialog {
 		g.gridx = 1;
 		g.gridy = 0;
 		JTextField authorField = new JTextField(20);
+		authorField.setName("authorField");
 		authorField.setToolTipText("Please enter your name");
 		authorField.setPreferredSize(new Dimension(100, 10));
 		add(authorField, g);
@@ -50,6 +51,7 @@ public class AuthorDialog extends JDialog {
 		g.gridy = 1;
 		g.gridwidth = 2;
 		JCheckBox saveBox = new JCheckBox("Remember me?");
+		saveBox.setName("saveBox");
 		add(saveBox, g);
 
 		g.gridx = 0;
@@ -59,6 +61,7 @@ public class AuthorDialog extends JDialog {
 		buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.X_AXIS));
 		buttonPanel.add(Box.createHorizontalGlue());
 		JButton saveButton = new JButton("Save");
+		saveButton.setName("saveButton");
 		saveButton.setToolTipText("Save your name");
 		saveButton.addActionListener(event -> {
 			Global.author = authorField.getText();

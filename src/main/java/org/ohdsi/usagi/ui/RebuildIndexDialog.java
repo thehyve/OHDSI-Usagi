@@ -57,6 +57,8 @@ public class RebuildIndexDialog extends JDialog {
 		setLocationRelativeTo(Global.frame);
 	}
 
+	public static boolean skipSystemExit = false;
+
 	private void buildIndex() {
 		String vocabFolder = vocabFolderField.getText();
 		String loincFile = loincFileField.getText();
@@ -75,6 +77,7 @@ public class RebuildIndexDialog extends JDialog {
 		Global.usagiSearchEngine.close();
 		Global.dbEngine.shutdown();
 		IndexBuildCoordinator indexBuildCoordinator = new IndexBuildCoordinator();
+		indexBuildCoordinator.setSkipSystemExit(skipSystemExit);
 		indexBuildCoordinator.buildIndexes(vocabFolder, loincCheckBox.isSelected() ? loincFile : null);
 	}
 
@@ -83,10 +86,12 @@ public class RebuildIndexDialog extends JDialog {
 		folderPanel.setLayout(new BoxLayout(folderPanel, BoxLayout.X_AXIS));
 		folderPanel.setBorder(BorderFactory.createTitledBorder("Vocabulary location"));
 		vocabFolderField = new JTextField();
+		vocabFolderField.setName("vocabFolderField");
 		vocabFolderField.setText(Global.folder);
 		vocabFolderField.setToolTipText("The folder where the Vocabulary csv files can be found");
 		folderPanel.add(vocabFolderField);
 		JButton pickButton = new JButton("Pick folder");
+		pickButton.setName("pickButton");
 		pickButton.setToolTipText("Pick the location of the Vocabulary csv files");
 		folderPanel.add(pickButton);
 		pickButton.addActionListener(new ActionListener() {
@@ -158,6 +163,7 @@ public class RebuildIndexDialog extends JDialog {
 		panel.add(cancelButton);
 
 		JButton importButton = new JButton("Build index");
+		importButton.setName("buildIndexButton");
 		importButton.setBackground(new Color(151, 220, 141));
 		importButton.addActionListener(new ActionListener() {
 

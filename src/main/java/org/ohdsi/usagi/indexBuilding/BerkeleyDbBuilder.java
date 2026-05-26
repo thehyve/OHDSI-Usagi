@@ -29,14 +29,41 @@ import org.ohdsi.utilities.collections.IntHashSet;
 import org.ohdsi.utilities.files.ReadCSVFileWithHeader;
 import org.ohdsi.utilities.files.Row;
 
+/**
+ * Interface for progress reporting during index building.
+ * This is used to make the code more testable.
+ */
+interface ProgressReporter {
+    void report(String message);
+}
+
 public class BerkeleyDbBuilder {
 	private BerkeleyDbEngine		dbEngine;
-	private BuildThread				buildThread;
+	private ProgressReporter		progressReporter;
 	private IntHashSet				validConceptIds;
 	private Map<Integer, String>	conceptIdToAtcCode;
 
+	/**
+	 * Build the index using the specified vocabulary folder and LOINC file.
+	 * 
+	 * @param vocabFolder The folder containing the vocabulary files
+	 * @param loincFileName The path to the LOINC file, or null if not available
+	 * @param buildThread The BuildThread to report progress to
+	 */
 	public void buildIndex(String vocabFolder, String loincFileName, BuildThread buildThread) {
-		this.buildThread = buildThread;
+		buildIndex(vocabFolder, loincFileName, buildThread::report);
+	}
+
+	/**
+	 * Build the index using the specified vocabulary folder and LOINC file.
+	 * This overload accepts a ProgressReporter interface for easier testing.
+	 * 
+	 * @param vocabFolder The folder containing the vocabulary files
+	 * @param loincFileName The path to the LOINC file, or null if not available
+	 * @param progressReporter The ProgressReporter to report progress to
+	 */
+	public void buildIndex(String vocabFolder, String loincFileName, ProgressReporter progressReporter) {
+		this.progressReporter = progressReporter;
 		dbEngine = new BerkeleyDbEngine(Global.folder);
 		dbEngine.createDatabase();
 		loadValidConceptIdsAndAtcCodes(vocabFolder + "/CONCEPT.csv");
@@ -49,7 +76,7 @@ public class BerkeleyDbBuilder {
 	private IntHashSet loadValidConceptIdsAndAtcCodes(String conceptFileName) {
 		validConceptIds = new IntHashSet();
 		conceptIdToAtcCode = new HashMap<Integer, String>();
-		
+
 		for (Row row : new ReadAthenaFile(conceptFileName))
 			if (row.get("invalid_reason").length() == 0) {
 				validConceptIds.add(row.getInt("concept_id"));
@@ -60,15 +87,15 @@ public class BerkeleyDbBuilder {
 	}
 
 	private void loadRelationships(String conceptRelationshipFileName) {
-		buildThread.report("Loading relationship information");
+		progressReporter.report("Loading relationship information");
 		int count = 0;
 		for (Row row : new ReadAthenaFile(conceptRelationshipFileName)) {
-			if (row.get("relationship_id").equals("Maps to") && row.get("invalid_reason") == null && !row.get("concept_id_1").equals(row.get("concept_id_2"))
+			if (row.get("relationship_id").equals("Maps to") && row.get("invalid_reason").length() == 0 && !row.get("concept_id_1").equals(row.get("concept_id_2"))
 					&& validConceptIds.contains(row.getInt("concept_id_1")) && validConceptIds.contains(row.getInt("concept_id_2"))) {
 				MapsToRelationship mapsToRelationship = new MapsToRelationship(row);
 				dbEngine.put(mapsToRelationship);
 			}
-			if (row.get("relationship_id").equals("ATC - RxNorm") && row.get("invalid_reason") == null && validConceptIds.contains(row.getInt("concept_id_1"))
+			if (row.get("relationship_id").equals("ATC - RxNorm") && row.get("invalid_reason").length() == 0 && validConceptIds.contains(row.getInt("concept_id_1"))
 					&& validConceptIds.contains(row.getInt("concept_id_2"))) {
 				String atc = conceptIdToAtcCode.get(row.getInt("concept_id_1"));
 				if (atc != null) {
@@ -84,7 +111,7 @@ public class BerkeleyDbBuilder {
 	private void loadAncestors(String conceptAncestorFileName) {
 		File file = new File(conceptAncestorFileName);
 		if (file.exists()) {
-			buildThread.report("Loading parent-child information");
+			progressReporter.report("Loading parent-child information");
 			int count = 0;
 			for (Row row : new ReadAthenaFile(conceptAncestorFileName)) {
 				if (row.get("min_levels_of_separation").equals("1") && !row.get("ancestor_concept_id").equals(row.get("descendant_concept_id"))
@@ -102,10 +129,10 @@ public class BerkeleyDbBuilder {
 	private void loadConcepts(String conceptFileName, String loincFileName) {
 		Map<String, String> loincToInfo = null;
 		if (loincFileName != null) {
-			buildThread.report("Loading LOINC additional information");
+			progressReporter.report("Loading LOINC additional information");
 			loincToInfo = loadLoincInfo(loincFileName);
 		}
-		buildThread.report("Loading concept information");
+		progressReporter.report("Loading concept information");
 		int count = 0;
 		for (Row row : new ReadAthenaFile(conceptFileName)) {
 			Concept concept = new Concept(row);

@@ -1,4 +1,4 @@
-name: "OHDSI White Rabbit"
+name: "OHDSI Usagi"
 output_dir: "."
 output:
   html_document:

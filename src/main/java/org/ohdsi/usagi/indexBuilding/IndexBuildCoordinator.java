@@ -15,6 +15,11 @@ import org.ohdsi.utilities.StringUtilities;
  * Calls the builders for the Berkeley DB and the Lucene index, and create a dialog for the user
  */
 public class IndexBuildCoordinator {
+	private boolean skipSystemExit = false;
+
+	public void setSkipSystemExit(boolean skipSystemExit) {
+		this.skipSystemExit = skipSystemExit;
+	}
 
 	public static void main(String[] args) {
 		Global.folder = "c:/data/usagi/";
@@ -58,7 +63,9 @@ public class IndexBuildCoordinator {
 		try {
 			thread.join();
 			JOptionPane.showMessageDialog(Global.frame, "Please restart Usagi to use the new index");
-			System.exit(0);
+			if (!skipSystemExit) {
+				System.exit(0);
+			}
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}

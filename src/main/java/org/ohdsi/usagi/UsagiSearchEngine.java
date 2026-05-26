@@ -361,6 +361,9 @@ public class UsagiSearchEngine {
 				Document document = reader.document(scoreDoc.doc);
 				int conceptId = Integer.parseInt(document.get("CONCEPT_ID"));
 				Concept targetConcept = Global.dbEngine.getConcept(conceptId);
+				if (targetConcept == null) {
+					continue;
+				}
 				String term = document.get("TERM");
 				// If matchscore = 0 but it was the one concept that was automatically selected, still allow it:
 				if (scoreDoc.score > 0 || (filterConceptIds != null && filterConceptIds.size() == 1 && filterConceptIds.contains(targetConcept.conceptId)))
@@ -595,7 +598,7 @@ public class UsagiSearchEngine {
 	}
 
 	public boolean isOpenForSearching() {
-		return (reader != null);
+		return (reader != null && Global.dbEngine != null);
 	}
 }
 
