@@ -21,6 +21,13 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v3
+        with:
+          languages: java-kotlin
+          # If using newer CodeQL versions, you can explicitly set the build mode to manual:
+          build-mode: manual
+
       - uses: actions/checkout@v4
 
       - uses: actions/setup-java@v4
